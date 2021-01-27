@@ -31,7 +31,7 @@ jobs:
     - name: Cache ccache
       uses: actions/cache@v2
       with:
-        path: .ccache
+        path: /home/runner/.ccache
         key: ccache-1-${{steps.date.outputs.date}}
         restore-keys: ccache-1-
 
