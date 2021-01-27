@@ -35,8 +35,8 @@ jobs:
       uses: actions/cache@v2
       with:
         path: .ccache
-        key: ${ { matrix.config.name } }-ccache-1-${ { steps.ccache_cache_timestamp.outputs.timestamp } }
-        restore-keys: ${ { matrix.config.name } }-ccache-1-
+        key: ${ { matrix.config.name } }-ccache-2-${ { steps.ccache_cache_timestamp.outputs.timestamp } }
+        restore-keys: ${ { matrix.config.name } }-ccache-2-
 
     - name: ccache status
       run: |
