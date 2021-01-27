@@ -31,7 +31,9 @@ jobs:
         key: linux-debug-1
 
     - name: ccache status
-      run: ccache -s
+      run: |
+        ccache -s
+        du -hs ~/.ccache
 
     - name: Build
       run: |
@@ -41,4 +43,6 @@ jobs:
 
     - name: ccache status
       if: always()
-      run: ccache -s
+      run: |
+        ccache -s
+        du -hs ~/.ccache
