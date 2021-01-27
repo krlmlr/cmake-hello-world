@@ -5,7 +5,6 @@ defaults:
     shell: bash
 
 jobs:
-
   linux-debug:
     name: Linux Debug
     runs-on: ubuntu-20.04
@@ -24,11 +23,20 @@ jobs:
     - name: Install
       run: sudo apt-get install ccache
 
-    - name: Cache ccache
+    # https://cristianadam.eu/20200113/speeding-up-c-plus-plus-github-actions-using-ccache/
+    - name: Prepare ccache timestamp
+      id: ccache_cache_timestamp
+      shell: cmake -P {0}
+      run: |
+        string(TIMESTAMP current_date "%Y-%m-%d-%H:%M:%S" UTC)
+        message("::set-output name=timestamp::${current_date}")
+
+    - name: ccache cache files
       uses: actions/cache@v2
       with:
-        path: ~/.ccache
-        key: linux-debug-1
+        path: .ccache
+        key: ${ { matrix.config.name } }-ccache-1-${ { steps.ccache_cache_timestamp.outputs.timestamp } }
+        restore-keys: ${ { matrix.config.name } }-ccache-1-
 
     - name: ccache status
       run: |
