@@ -1,0 +1,51 @@
+on: [push, pull_request]
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+  node_pre_gyp_accessKeyId: AKIAVBLKPL2ZW2T7TYFQ
+  node_pre_gyp_secretAccessKey: ${{ secrets.NODE_PRE_GYP_SECRETACCESSKEY }}
+  NODE_AUTH_TOKEN: ${{secrets.NODE_AUTH_TOKEN}}
+
+jobs:
+
+  linux-debug:
+    name: Linux Debug
+    runs-on: ubuntu-20.04
+
+    env:
+      CC: gcc-10
+      CXX: g++-10
+      TREAT_WARNINGS_AS_ERRORS: 1
+      GEN: ninja
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Install
+      run: sudo apt-get install ninja-build ccache
+
+    - name: Cache ccache
+      uses: actions/cache@v2
+      with:
+        path: ~/.ccache
+        key: linux-debug-1
+
+    - name: ccache status
+      run: ccache -s
+
+    - name: Build
+      run: make debug
+
+    - name: Test
+      run: make unit
+
+    - name: ccache status
+      if: always()
+      run: ccache -s
