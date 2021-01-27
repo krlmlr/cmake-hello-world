@@ -26,7 +26,7 @@ jobs:
     # https://cristianadam.eu/20200113/speeding-up-c-plus-plus-github-actions-using-ccache/
     - name: Prepare cache keys
       id: date
-      run: echo "::set-output name=date::$(date -Ihours)"
+      run: echo "::set-output name=date::$(date -Isec)"
 
     - name: Cache ccache
       uses: actions/cache@v2
