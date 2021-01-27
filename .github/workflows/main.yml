@@ -20,34 +20,13 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install
-      run: sudo apt-get install ccache
-
-    # https://cristianadam.eu/20200113/speeding-up-c-plus-plus-github-actions-using-ccache/
-    - name: Prepare cache keys
-      id: date
-      run: echo "::set-output name=date::$(date -Isec)"
-
-    - name: Cache ccache
-      uses: actions/cache@v2
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1
       with:
-        path: /home/runner/.ccache
-        key: ccache-1-${{steps.date.outputs.date}}
-        restore-keys: ccache-1-
-
-    - name: ccache status
-      run: |
-        ccache -s
-        du -hs ~/.ccache
+        key: 1
 
     - name: Build
       run: |
         mkdir build
         cd build
         cmake .. && make
-
-    - name: ccache status
-      if: always()
-      run: |
-        ccache -s
-        du -hs ~/.ccache
